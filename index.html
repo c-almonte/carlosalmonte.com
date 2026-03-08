@@ -1,9 +1,832 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>My First Site</title>
-  </head>
-  <body>
-    <h1>Hello, it works.</h1>
-  </body>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carlos Almonte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --warm: #f5f0e8;
+    --paper: #faf8f4;
+    --gold: #c49a3c;
+    --muted: #8a8278;
+    --accent: #2c4a3e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    mix-blend-mode: multiply;
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 120px 48px 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(64px, 7vw, 96px);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  .hero-name em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-tagline {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 400px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  .hero-tagline strong {
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: 14px 32px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--accent); }
+
+  .btn-ghost {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+    transition: color 0.2s;
+  }
+
+  .btn-ghost:hover { color: var(--ink); }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+    background: var(--warm);
+  }
+
+  .hero-right::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 60%, rgba(196, 154, 60, 0.08) 100%);
+  }
+
+  .hero-visual {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-quote {
+    position: absolute;
+    bottom: 80px;
+    left: 48px;
+    right: 48px;
+    z-index: 3;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+  }
+
+  .hero-quote blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.5;
+    color: var(--ink);
+    opacity: 0.7;
+  }
+
+  .hero-quote cite {
+    display: block;
+    margin-top: 12px;
+    font-size: 11px;
+    font-style: normal;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* Big decorative letters */
+  .deco-letter {
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 400px;
+    font-weight: 300;
+    color: rgba(196, 154, 60, 0.06);
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .deco-letter-1 { top: -60px; right: -40px; }
+
+  /* PILLARS */
+  .pillars {
+    padding: 120px 48px;
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pillars::before {
+    content: 'FAITH  FAMILY  WORK';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 120px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.03);
+    white-space: nowrap;
+    letter-spacing: 0.3em;
+    pointer-events: none;
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .pillar {
+    padding: 56px 40px;
+    border-left: 1px solid rgba(255,255,255,0.08);
+    transition: background 0.3s;
+    cursor: default;
+  }
+
+  .pillar:first-child { border-left: none; }
+  .pillar:hover { background: rgba(255,255,255,0.03); }
+
+  .pillar-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    margin-bottom: 24px;
+  }
+
+  .pillar-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 300;
+    color: #f5f0e8;
+    margin-bottom: 20px;
+    line-height: 1;
+  }
+
+  .pillar-text {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: rgba(245, 240, 232, 0.5);
+  }
+
+  /* ABOUT STRIP */
+  .about-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 600px;
+  }
+
+  .about-image {
+    background: var(--warm);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .about-image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(160deg, #e8e0d0 0%, #d4c9b4 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 600px;
+  }
+
+  .initials {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 160px;
+    font-weight: 300;
+    color: rgba(196, 154, 60, 0.2);
+    letter-spacing: -0.05em;
+  }
+
+  .about-content {
+    padding: 80px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--warm);
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .about-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+
+  .about-heading em { font-style: italic; color: var(--accent); }
+
+  .about-body {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+
+  .about-body strong { color: var(--ink); font-weight: 400; }
+
+  .roles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 40px;
+  }
+
+  .role-tag {
+    padding: 6px 16px;
+    border: 1px solid rgba(26,24,20,0.15);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* LATEST THOUGHTS */
+  .thoughts {
+    padding: 120px 48px;
+    background: var(--paper);
+  }
+
+  .thoughts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 64px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .thoughts-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 56px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .thoughts-title em { font-style: italic; color: var(--gold); }
+
+  .thoughts-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 2px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .thought-card {
+    background: var(--warm);
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 360px;
+    transition: background 0.3s;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .thought-card:hover { background: #ede7d9; }
+
+  .thought-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .thought-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.25;
+    color: var(--ink);
+    flex: 1;
+    margin-bottom: 32px;
+  }
+
+  .thought-card.featured .thought-title {
+    font-size: 38px;
+  }
+
+  .thought-meta {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* SHOW UP */
+  .show-up {
+    padding: 100px 48px;
+    background: var(--accent);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .show-up::before {
+    content: 'SHOW UP';
+    position: absolute;
+    bottom: -40px;
+    right: -20px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 200px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.04);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .show-up-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .show-up-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.5);
+    margin-bottom: 24px;
+  }
+
+  .show-up-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px;
+    font-weight: 300;
+    color: #f5f0e8;
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+
+  .show-up-sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(245,240,232,0.6);
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  .events-row {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 48px;
+  }
+
+  .event-item {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    padding: 28px 24px;
+    text-align: left;
+  }
+
+  .event-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .event-name {
+    font-size: 13px;
+    font-weight: 400;
+    color: #f5f0e8;
+    margin-bottom: 4px;
+  }
+
+  .event-type {
+    font-size: 11px;
+    color: rgba(245,240,232,0.4);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .btn-light {
+    display: inline-block;
+    padding: 14px 40px;
+    border: 1px solid rgba(245,240,232,0.3);
+    color: #f5f0e8;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-light:hover {
+    background: rgba(245,240,232,0.1);
+    border-color: rgba(245,240,232,0.6);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 64px 48px;
+    background: var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 300;
+    color: var(--warm);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--warm); }
+
+  .footer-copy {
+    font-size: 11px;
+    color: rgba(245,240,232,0.25);
+    letter-spacing: 0.05em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Carlos Almonte</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#thoughts">Writing</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#contact">Connect</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Believer. Father. Artist. Strategist.</p>
+    <h1 class="hero-name">Carlos<br><em>Almonte</em></h1>
+    <p class="hero-tagline">
+      A place to think out loud. To share what I've learned across <strong>music, faith, family, business,</strong> and the beautiful improvisation that ties it all together.
+    </p>
+    <div class="hero-cta">
+      <a href="#about" class="btn-primary">My Story</a>
+      <a href="#thoughts" class="btn-ghost">Read the Blog</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="deco-letter deco-letter-1">C</div>
+    </div>
+    <div class="hero-quote">
+      <blockquote>"The notes you don't play are as important as the ones you do."</blockquote>
+      <cite>A jazz principle. A life principle.</cite>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section class="pillars">
+  <div class="pillars-grid">
+    <div class="pillar reveal">
+      <div class="pillar-number">01</div>
+      <div class="pillar-title">Faith</div>
+      <p class="pillar-text">Everything I do flows from a foundation in Jesus. Not as a talking point, but as the actual source of clarity, humility, and purpose in how I lead, create, and serve.</p>
+    </div>
+    <div class="pillar reveal">
+      <div class="pillar-number">02</div>
+      <div class="pillar-title">Family</div>
+      <p class="pillar-text">Married 18 years to Devin. Father to Myles, Ellie, and Grayson. Community coach. These aren't things I balance against my work — they are the work that matters most.</p>
+    </div>
+    <div class="pillar reveal">
+      <div class="pillar-number">03</div>
+      <div class="pillar-title">Work</div>
+      <p class="pillar-text">Nearly 30 years across music, agencies, startups, and strategy. Founder of Motevo Co. Helping innovation-led businesses find their voice, sharpen their positioning, and build with purpose.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-strip" id="about">
+  <div class="about-image">
+    <div class="about-image-placeholder">
+      <div class="initials">CA</div>
+    </div>
+  </div>
+  <div class="about-content">
+    <p class="section-label">The Long Version</p>
+    <h2 class="about-heading">Believer. Artist.<br><em>Father.</em> Strategist.</h2>
+    <p class="about-body">
+      Three words have followed me across every chapter of my life: <strong>Innovation. Improvisation. Invention.</strong> I didn't choose them -- they chose me.
+      <br><br>
+      I came up as an artist. Music was the first language. Jazz taught me to listen before I spoke, to trust the space between notes, and to find structure inside chaos. I spent a decade playing in New York City before the digital world pulled me in.
+      <br><br>
+      What followed was 28 years across global agencies like <strong>R/GA and Publicis Sapient</strong>, the startup ecosystem at <strong>Techstars</strong>, and eventually founding <strong>Motevo Co</strong> in 2021. Different stages, same instinct -- show up, read the room, build something that matters.
+    </p>
+    <div class="roles">
+      <span class="role-tag">Brand Strategist</span>
+      <span class="role-tag">Fractional CMO</span>
+      <span class="role-tag">Speaker</span>
+      <span class="role-tag">Musician</span>
+      <span class="role-tag">Coach</span>
+      <span class="role-tag">Writer</span>
+    </div>
+    <a href="#" class="btn-primary">Full Story</a>
+  </div>
+</section>
+
+<!-- THOUGHTS -->
+<section class="thoughts" id="thoughts">
+  <div class="thoughts-header reveal">
+    <h2 class="thoughts-title">Latest<br><em>Thoughts</em></h2>
+    <a href="#" class="btn-ghost">All Writing</a>
+  </div>
+  <div class="thoughts-grid">
+    <div class="thought-card featured reveal">
+      <div>
+        <span class="thought-tag">Faith + Work</span>
+        <h3 class="thought-title">What Jazz Taught Me About Trusting a Process You Can't Control</h3>
+      </div>
+      <div class="thought-meta">Featured Essay &nbsp;&middot;&nbsp; 8 min read</div>
+    </div>
+    <div class="thought-card reveal">
+      <div>
+        <span class="thought-tag">Leadership</span>
+        <h3 class="thought-title">The Quiet Power of Showing Up Consistently</h3>
+      </div>
+      <div class="thought-meta">4 min read</div>
+    </div>
+    <div class="thought-card reveal">
+      <div>
+        <span class="thought-tag">Family</span>
+        <h3 class="thought-title">Raising Kids Who Know What They Stand For</h3>
+      </div>
+      <div class="thought-meta">5 min read</div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOW UP / EVENTS -->
+<section class="show-up" id="events">
+  <div class="show-up-inner">
+    <p class="show-up-label">Live & In Person</p>
+    <h2 class="show-up-heading">Come As You Are</h2>
+    <p class="show-up-sub">I show up regularly for conversations about faith, work, creative leadership, and what it means to build something that actually matters. Join me live.</p>
+
+    <div class="events-row">
+      <div class="event-item">
+        <div class="event-date">Mar<br>20</div>
+        <div class="event-name">Brand Clarity for Founders</div>
+        <div class="event-type">LinkedIn Live</div>
+      </div>
+      <div class="event-item">
+        <div class="event-date">Apr<br>04</div>
+        <div class="event-name">Faith & the Entrepreneurial Journey</div>
+        <div class="event-type">Webinar</div>
+      </div>
+      <div class="event-item">
+        <div class="event-date">Apr<br>18</div>
+        <div class="event-name">The Improvisation Framework</div>
+        <div class="event-type">Workshop</div>
+      </div>
+    </div>
+
+    <a href="#" class="btn-light">View Full Calendar</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Carlos Almonte</div>
+  <ul class="footer-links">
+    <li><a href="#">About</a></li>
+    <li><a href="#">Writing</a></li>
+    <li><a href="#">Work</a></li>
+    <li><a href="https://motevo.co" target="_blank">Motevo Co</a></li>
+    <li><a href="#">Connect</a></li>
+  </ul>
+  <p class="footer-copy">&copy; 2026 Carlos Almonte</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
 </html>
