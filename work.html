@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work — Carlos Almonte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --warm: #f5f0e8;
+    --paper: #faf8f4;
+    --gold: #c49a3c;
+    --muted: #8a8278;
+    --accent: #2c4a3e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(250,248,244,0.92);
+    backdrop-filter: blur(8px);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active { color: var(--ink); }
+
+  /* HERO */
+  .work-hero {
+    padding: 160px 48px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero-label {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.1s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(56px, 6vw, 88px);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.2s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-intro {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--muted);
+    max-width: 640px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.3s forwards;
+  }
+
+  .hero-intro strong { color: var(--ink); font-weight: 400; }
+
+  /* FILTERS */
+  .filters-bar {
+    padding: 0 48px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.4s forwards;
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 8px 20px;
+    border: 1px solid rgba(26,24,20,0.15);
+    background: transparent;
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover,
+  .filter-btn.active {
+    background: var(--ink);
+    color: var(--warm);
+    border-color: var(--ink);
+  }
+
+  /* WORK GRID */
+  .work-grid {
+    padding: 0 48px 120px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .work-card {
+    background: var(--warm);
+    padding: 48px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 360px;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .work-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 0;
+    background: var(--gold);
+    transition: height 0.4s ease;
+  }
+
+  .work-card:hover { background: #ede7d9; }
+  .work-card:hover::before { height: 100%; }
+
+  .work-card.featured {
+    grid-column: span 2;
+    background: var(--ink);
+    min-height: 280px;
+    flex-direction: row;
+    align-items: center;
+    gap: 80px;
+  }
+
+  .work-card.featured:hover { background: #252218; }
+  .work-card.featured::before { background: var(--gold); }
+
+  .card-top { }
+
+  .card-era {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .work-card.featured .card-era { color: var(--gold); }
+
+  .card-client {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 34px;
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .work-card.featured .card-client {
+    font-size: 48px;
+    color: var(--warm);
+    max-width: 360px;
+  }
+
+  .card-type {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--muted);
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+  }
+
+  .work-card.featured .card-type { color: rgba(245,240,232,0.5); }
+
+  .card-desc {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #5a5450;
+    flex: 1;
+    margin-bottom: 32px;
+  }
+
+  .work-card.featured .card-desc {
+    color: rgba(245,240,232,0.65);
+    font-size: 15px;
+    max-width: 480px;
+    flex: none;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .card-tag {
+    padding: 4px 12px;
+    border: 1px solid rgba(26,24,20,0.12);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .work-card.featured .card-tag {
+    border-color: rgba(245,240,232,0.15);
+    color: rgba(245,240,232,0.45);
+  }
+
+  /* SECTION LABEL */
+  .section-header {
+    padding: 0 48px 32px;
+    max-width: 1200px;
+    margin: 40px auto 0;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 44px;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .section-title em { font-style: italic; color: var(--accent); }
+
+  /* DIVIDER */
+  .section-divider {
+    max-width: 1200px;
+    margin: 0 auto 0;
+    padding: 0 48px;
+    border-top: 1px solid rgba(26,24,20,0.08);
+    margin-bottom: 0;
+  }
+
+  /* CTA */
+  .cta-strip {
+    background: var(--accent);
+    padding: 80px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-strip::before {
+    content: 'WORK';
+    position: absolute;
+    bottom: -40px; right: -20px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 220px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+
+  .cta-inner { max-width: 600px; margin: 0 auto; position: relative; z-index: 2; }
+
+  .cta-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+    margin-bottom: 20px;
+  }
+
+  .cta-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 56px;
+    font-weight: 300;
+    color: var(--warm);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+
+  .cta-heading em { font-style: italic; color: var(--gold); }
+
+  .cta-sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(245,240,232,0.55);
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .btn-gold {
+    display: inline-block;
+    padding: 14px 40px;
+    background: var(--gold);
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .btn-gold:hover { opacity: 0.85; }
+
+  /* FOOTER */
+  footer {
+    padding: 48px;
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--warm);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.35);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--warm); }
+  .footer-copy { font-size: 11px; color: rgba(245,240,232,0.2); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* hidden cards for filter */
+  .work-card.hidden { display: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+
+    .work-hero { padding: 120px 24px 60px; }
+    .filters-bar { padding: 0 24px 40px; }
+
+    .work-grid {
+      grid-template-columns: 1fr;
+      padding: 0 24px 80px;
+    }
+
+    .work-card.featured {
+      grid-column: span 1;
+      flex-direction: column;
+      gap: 32px;
+      padding: 40px 28px;
+    }
+
+    .work-card.featured .card-client { font-size: 36px; }
+
+    .section-header { padding: 0 24px 24px; }
+    .section-divider { padding: 0 24px; }
+
+    .cta-strip { padding: 64px 24px; }
+    .cta-heading { font-size: 40px; }
+
+    footer {
+      flex-direction: column;
+      gap: 28px;
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .footer-links { flex-wrap: wrap; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Carlos Almonte</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="#">Writing</a></li>
+    <li><a href="work.html" class="active">Work</a></li>
+    <li><a href="#">Events</a></li>
+    <li><a href="#">Connect</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="work-hero">
+  <p class="hero-label">Selected Work</p>
+  <h1 class="hero-title">Nearly 30 Years.<br><em>A Few Worth Sharing.</em></h1>
+  <p class="hero-intro">
+    Across agencies, startups, and my own consultancy, I've had the privilege of working on things that made a real difference. These are the projects I'm most proud of -- from <strong>global brands to early-stage founders</strong>, each one taught me something.
+  </p>
+</section>
+
+<!-- FILTERS -->
+<div class="filters-bar">
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="motevo">Motevo Co</button>
+    <button class="filter-btn" data-filter="techstars">Techstars</button>
+    <button class="filter-btn" data-filter="sapient">Publicis Sapient</button>
+    <button class="filter-btn" data-filter="rga">R/GA</button>
+  </div>
+</div>
+
+<!-- MOTEVO -->
+<div class="section-header reveal">
+  <p class="section-label">Current Work</p>
+  <div style="display: flex; align-items: baseline; gap: 24px;">
+    <h2 class="section-title"><em>Motevo Co</em></h2>
+    <a href="https://motevo.co" target="_blank" style="font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold); padding-bottom: 2px; white-space: nowrap;">Visit motevo.co ↗</a>
+  </div>
+</div>
+<div class="section-divider"></div>
+
+<div class="work-grid" id="motevo-grid">
+
+  <div class="work-card reveal" data-category="motevo">
+    <div class="card-top">
+      <span class="card-era">Motevo Co &nbsp;&middot;&nbsp; 2026 – Present</span>
+      <h3 class="card-client">Replay.io</h3>
+      <p class="card-type">Fractional CXO & Brand Strategy</p>
+    </div>
+    <p class="card-desc">Replay.io is a developer-focused debugging platform with two distinct product lines -- Replay MCP for engineers and a Chrome Extension for non-technical builders. Motevo is providing fractional CXO support, helping the team clarify positioning, sharpen messaging across both audiences, and build a marketing foundation for growth.</p>
+    <div class="card-tags">
+      <span class="card-tag">Fractional CMO</span>
+      <span class="card-tag">Brand Strategy</span>
+      <span class="card-tag">Dev Tools</span>
+    </div>
+  </div>
+
+  <div class="work-card reveal" data-category="motevo">
+    <div class="card-top">
+      <span class="card-era">Motevo Co &nbsp;&middot;&nbsp; 2025 – Present</span>
+      <h3 class="card-client">Salmon Labs</h3>
+      <p class="card-type">Fractional CXO & Brand Strategy</p>
+    </div>
+    <p class="card-desc">Salmon Labs provides enterprise teams with an AI-native real-time data intelligence layer that integrates directly into existing CRM and sales systems. Motevo developed their brand positioning, messaging framework, and channel strategy -- helping them articulate a differentiated value proposition in a crowded market, with clients including Google Cloud and Scale AI.</p>
+    <div class="card-tags">
+      <span class="card-tag">Brand Strategy</span>
+      <span class="card-tag">Positioning</span>
+      <span class="card-tag">B2B</span>
+    </div>
+  </div>
+
+  <div class="work-card reveal" data-category="motevo">
+    <div class="card-top">
+      <span class="card-era">Motevo Co &nbsp;&middot;&nbsp; 2025 – Present</span>
+      <h3 class="card-client">Outer Edge Technology</h3>
+      <p class="card-type">Fractional CXO & Brand Strategy</p>
+    </div>
+    <p class="card-desc">Outer Edge Technology is a managed IT services firm specializing in regulated industries including healthcare and life sciences. Motevo built their full brand framework -- audience personas, competitive positioning, mission and value proposition -- centered on their embedded partnership model and the insight that compliance should be a competitive advantage, not just a constraint.</p>
+    <div class="card-tags">
+      <span class="card-tag">Brand Strategy</span>
+      <span class="card-tag">Healthcare</span>
+      <span class="card-tag">Positioning</span>
+    </div>
+  </div>
+
+  <div class="work-card reveal" data-category="motevo">
+    <div class="card-top">
+      <span class="card-era">Motevo Co &nbsp;&middot;&nbsp; 2025 – Present</span>
+      <h3 class="card-client">Pause Ministries</h3>
+      <p class="card-type">Brand Strategy & Fundraising</p>
+    </div>
+    <p class="card-desc">Pause Ministries is a Christian nonprofit helping people slow down and reconnect with faith. Motevo supported their national growth through a visual brand rethink, fundraising presentation development, and a content strategy designed to expand their reach and deepen community engagement.</p>
+    <div class="card-tags">
+      <span class="card-tag">Nonprofit</span>
+      <span class="card-tag">Faith</span>
+      <span class="card-tag">Brand</span>
+      <span class="card-tag">Content</span>
+    </div>
+  </div>
+
+  <div class="work-card reveal" data-category="motevo">
+    <div class="card-top">
+      <span class="card-era">Motevo Co &nbsp;&middot;&nbsp; 2024</span>
+      <h3 class="card-client">Hunchly</h3>
+      <p class="card-type">Brand Strategy, Site Redesign & Paid Media</p>
+    </div>
+    <p class="card-desc">Hunchly, an evidence capture tool for online investigators, needed an urgent overhaul. In two months, Motevo delivered a brand framework, full site redesign built in React on Vercel, HubSpot integration for enterprise lead capture, GA4 setup, and Hunchly's first-ever paid media strategy.</p>
+    <div class="card-tags">
+      <span class="card-tag">Brand</span>
+      <span class="card-tag">Redesign</span>
+      <span class="card-tag">Paid Media</span>
+      <span class="card-tag">React</span>
+    </div>
+  </div>
+
+  <div class="work-card reveal" data-category="motevo">
+    <div class="card-top">
+      <span class="card-era">Motevo Co &nbsp;&middot;&nbsp; 2023</span>
+      <h3 class="card-client">Level.co</h3>
+      <p class="card-type">Website Redesign & B2B Integration</p>
+    </div>
+    <p class="card-desc">Level.co, an access control tech company, came to &Kind deeply frustrated with how their digital presence reflected their brand ethos. Motevo served as a silent partner -- overseeing strategic and operational direction, managing workflow across multiple workstreams via Asana, and ensuring a full website redesign was delivered in just over four months. The project included integrating a newly acquired B2B division, new product content, SEO, and GA4.</p>
+    <div class="card-tags">
+      <span class="card-tag">Redesign</span>
+      <span class="card-tag">B2B</span>
+      <span class="card-tag">Strategy</span>
+      <span class="card-tag">Operations</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- TECHSTARS -->
+<div class="section-header reveal" style="margin-top: 80px;">
+  <p class="section-label">Startup & Innovation Era</p>
+  <h2 class="section-title"><em>Techstars</em></h2>
+</div>
+<div class="section-divider"></div>
+
+<div class="work-grid" id="techstars-grid">
+
+  <div class="work-card featured reveal" data-category="techstars">
+    <div class="card-top">
+      <span class="card-era">Techstars &nbsp;&middot;&nbsp; 2019–2020</span>
+      <h3 class="card-client">Global Rebrand</h3>
+      <p class="card-type">Brand Identity, Site Redesign & Full Asset Overhaul</p>
+      <p class="card-desc">As Executive Director of Global Marketing, I helped lead a full rebrand of Techstars from the ground up -- brand identity, site redesign, SWAG, and all supporting assets across a global organization. A top-to-bottom initiative that modernized how one of the world's most recognized startup accelerators presented itself to founders, investors, and partners worldwide.</p>
+    </div>
+    <div class="card-tags">
+      <span class="card-tag">Rebrand</span>
+      <span class="card-tag">Global</span>
+      <span class="card-tag">Site Redesign</span>
+      <span class="card-tag">Identity</span>
+    </div>
+  </div>
+
+  <div class="work-card reveal" data-category="techstars">
+    <div class="card-top">
+      <span class="card-era">Techstars &nbsp;&middot;&nbsp; 2021</span>
+      <h3 class="card-client">Web Summit</h3>
+      <p class="card-type">Events Strategy — Lisbon, Portugal</p>
+    </div>
+    <p class="card-desc">With live events just reopening post-pandemic, I developed and sold through a strategic presence at Web Summit in Lisbon -- Techstars' first major return to the live stage and a calculated bet on EMEA brand building. We sponsored 36 startups and 100+ founders, hosted two flagship events across startup and growth stages, held a large alumni gathering, and helped four internal departments achieve their own goals through a single activation.</p>
+    <div class="card-tags">
+      <span class="card-tag">Events</span>
+      <span class="card-tag">EMEA</span>
+      <span class="card-tag">Strategy</span>
+      <span class="card-tag">Sponsorship</span>
+    </div>
+  </div>
+
+  <div class="work-card reveal" data-category="techstars">
+    <div class="card-top">
+      <span class="card-era">Techstars &nbsp;&middot;&nbsp; 2020–2021</span>
+      <h3 class="card-client">Startup Weekend</h3>
+      <p class="card-type">Organizational Change Management</p>
+    </div>
+    <p class="card-desc">Led a large-scale OCM effort across 4 departments and 12 workstreams to restructure the operational model for Techstars Startup Weekend -- a global program spanning close to 1,000 events worldwide. The initiative focused on equipping event managers with the tools, assets, and frameworks to operate with greater autonomy and consistency at scale.</p>
+    <div class="card-tags">
+      <span class="card-tag">OCM</span>
+      <span class="card-tag">Operations</span>
+      <span class="card-tag">Global</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- AGENCY ERA -->
+<div class="section-header reveal" style="margin-top: 80px;">
+  <p class="section-label">Agency Era</p>
+  <h2 class="section-title">R/GA & <em>Publicis Sapient</em></h2>
+</div>
+<div class="section-divider"></div>
+
+<div class="work-grid" id="agency-grid">
+
+  <div class="work-card reveal" data-category="sapient">
+    <div class="card-top">
+      <span class="card-era">Publicis Sapient &nbsp;&middot;&nbsp; 2018–2019</span>
+      <h3 class="card-client">Samsung Global</h3>
+      <p class="card-type">Multi-Device Experience (MDE)</p>
+    </div>
+    <p class="card-desc">Samsung had made bold promises at Mobile World Congress 2017 around SmartThings and its connected home ecosystem. By late 2018 those promises had yet to materialize -- while Alexa and Google were establishing deep roots in the market. Our team pitched and won the global MDE business in Q4 2018. Over ten months we built a program that defined Samsung's approach to the connected home, accounting for nearly 27% of the Samsung account pipeline and putting them credibly on the map in a space they had been losing ground in.</p>
+    <div class="card-tags">
+      <span class="card-tag">Smart Home</span>
+      <span class="card-tag">Global</span>
+      <span class="card-tag">MDE</span>
+      <span class="card-tag">Strategy</span>
+    </div>
+  </div>
+
+  <div class="work-card reveal" data-category="rga">
+    <div class="card-top">
+      <span class="card-era">R/GA &nbsp;&middot;&nbsp; 2011–2016</span>
+      <h3 class="card-client">Johnson & Johnson</h3>
+      <p class="card-type">Donate a Photo — Mobile App & Program Growth</p>
+    </div>
+    <p class="card-desc">R/GA conceived and launched Donate a Photo in 2013 -- a mobile app that let people support nonprofit causes by uploading a photo, with each photo triggering a $1 donation from J&J to a partner nonprofit. I joined the program after launch and became a driving force in its growth and execution. By 2015 the initiative had generated over one million donated photos, entirely through organic engagement, before any paid media was introduced.</p>
+    <div class="card-tags">
+      <span class="card-tag">Mobile</span>
+      <span class="card-tag">Program Growth</span>
+      <span class="card-tag">CSR</span>
+      <span class="card-tag">Organic</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- CTA -->
+<div class="cta-strip">
+  <div class="cta-inner">
+    <p class="cta-eyebrow">Let's Build Something</p>
+    <h2 class="cta-heading">Have a <em>Project?</em></h2>
+    <p class="cta-sub">Whether you're a founder who needs brand clarity, a company ready to redesign, or an organization looking for strategic direction -- let's talk.</p>
+    <a href="#" class="btn-gold">Get In Touch</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">Carlos Almonte</div>
+  <ul class="footer-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="#">Writing</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="https://motevo.co" target="_blank">Motevo Co</a></li>
+    <li><a href="#">Connect</a></li>
+  </ul>
+  <p class="footer-copy">&copy; 2026 Carlos Almonte</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Filter
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const workCards = document.querySelectorAll('.work-card');
+  const sectionHeaders = document.querySelectorAll('.section-header');
+  const sectionDividers = document.querySelectorAll('.section-divider');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.dataset.filter;
+
+      workCards.forEach(card => {
+        if (filter === 'all' || card.dataset.category === filter) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
