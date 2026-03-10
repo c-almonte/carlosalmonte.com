@@ -46,8 +46,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(250,248,244,0.92);
+    background: transparent;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  nav.scrolled {
+    background: rgba(250,248,244,0.95);
     backdrop-filter: blur(8px);
+    box-shadow: 0 1px 0 rgba(26,24,20,0.06);
   }
 
   .nav-logo {
@@ -730,6 +736,16 @@
 </footer>
 
 <script>
+  // Nav scroll behavior
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+
   // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
