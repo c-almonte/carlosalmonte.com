@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carlos Almonte</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="robots" content="index, follow">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink: #1e2128;
+    --warm: #e8eaed;
+    --paper: #f4f5f7;
+    --gold: #c4745a;
+    --muted: #6b7280;
+    --accent: #2c4a3e;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  nav.scrolled {
+    background: rgba(244,245,247,0.96);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 1px 0 rgba(30,33,40,0.06);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a.active {
+    color: var(--gold);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+  }
+
+  /* ARTICLE LAYOUT */
+  .article-container {
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 140px 48px 80px;
+  }
+
+  /* HEADER */
+  .article-header {
+    margin-bottom: 56px;
+  }
+
+  .article-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .article-category {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .article-series-badge {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  .article-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+
+  .article-excerpt {
+    font-size: 19px;
+    line-height: 1.65;
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 32px;
+    border-left: 2px solid var(--gold);
+    padding-left: 20px;
+  }
+
+  .article-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: rgba(30,33,40,0.4);
+    letter-spacing: 0.06em;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(30,33,40,0.08);
+  }
+
+  .meta-sep {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(30,33,40,0.2);
+  }
+
+  /* BODY */
+  .article-body {
+    font-size: 18px;
+    line-height: 1.85;
+    color: var(--ink);
+    margin-bottom: 64px;
+  }
+
+  .article-body p {
+    margin-bottom: 28px;
+  }
+
+  .article-body h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 1.2;
+    color: var(--ink);
+    margin: 48px 0 20px;
+  }
+
+  .article-body h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--ink);
+    margin: 36px 0 16px;
+  }
+
+  .article-body strong { font-weight: 500; }
+
+  .article-body em { font-style: italic; color: var(--accent); }
+
+  .article-body blockquote {
+    border-left: 2px solid var(--gold);
+    padding: 4px 0 4px 24px;
+    margin: 36px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  .article-body a {
+    color: var(--gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* AUTHOR STRIP */
+  .author-strip {
+    border-top: 1px solid rgba(30,33,40,0.08);
+    padding-top: 48px;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 64px;
+  }
+
+  .author-photo {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    flex-shrink: 0;
+  }
+
+  .author-photo-placeholder {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--ink));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 300;
+    color: rgba(244,245,247,0.6);
+    font-style: italic;
+  }
+
+  .author-info { flex: 1; }
+
+  .author-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .author-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 10px;
+    text-decoration: none;
+    display: block;
+    transition: color 0.2s;
+  }
+
+  .author-name:hover { color: var(--gold); }
+
+  .author-bio {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* BACK LINK */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 64px;
+    transition: color 0.2s, gap 0.2s;
+  }
+
+  .back-link:hover { color: var(--ink); gap: 12px; }
+
+  /* HERO IMAGE */
+  .article-hero {
+    width: 100%;
+    max-height: 520px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 56px;
+    display: block;
+  }
+
+  /* INLINE IMAGES */
+  .article-body img,
+  .article-body .img-full {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 36px 0;
+    display: block;
+  }
+
+  .article-body .img-left {
+    float: left;
+    width: 45%;
+    height: auto;
+    border-radius: 4px;
+    margin: 8px 28px 20px 0;
+  }
+
+  .article-body .img-right {
+    float: right;
+    width: 45%;
+    height: auto;
+    border-radius: 4px;
+    margin: 8px 0 20px 28px;
+  }
+
+  .article-body figure.img-captioned {
+    margin: 36px 0;
+  }
+
+  .article-body figure.img-captioned img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 0;
+  }
+
+  .article-body figure.img-captioned figcaption {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    margin-top: 10px;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .article-body::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  /* NOT FOUND */
+  .not-found {
+    text-align: center;
+    padding: 80px 40px;
+  }
+
+  .not-found h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+
+  .not-found p {
+    font-size: 17px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    padding: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 300;
+    color: rgba(244,245,247,0.6);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(244,245,247,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: rgba(244,245,247,0.8); }
+  .footer-copy { font-size: 13px; color: rgba(244,245,247,0.2); }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .article-container { padding: 120px 24px 60px; }
+    .author-strip { flex-direction: column; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Carlos Almonte</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="writing.html" class="active">Writing</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="#">Events</a></li>
+    <li><a href="#">Connect</a></li>
+  </ul>
+</nav>
+
+<div class="article-container" id="article-container">
+  <div style="text-align:center;padding:80px 0;color:var(--muted);">Loading...</div>
+</div>
+
+<footer>
+  <div class="footer-logo">Carlos Almonte</div>
+  <ul class="footer-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="writing.html">Writing</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="https://motevo.co" target="_blank">Motevo Co</a></li>
+    <li><a href="#">Connect</a></li>
+  </ul>
+  <p class="footer-copy">&copy; 2026 Carlos Almonte</p>
+</footer>
+
+<script>
+  // Nav scroll
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  function capFirst(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+
+  function formatDate(d) {
+    if (!d) return '';
+    return new Date(d).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  }
+
+  function setMeta(article, author) {
+    document.title = `${article.title} | Carlos Almonte`;
+
+    const setTag = (sel, attr, val) => {
+      let el = document.querySelector(sel);
+      if (!el) { el = document.createElement('meta'); document.head.appendChild(el); }
+      el.setAttribute(attr, val);
+    };
+
+    const desc = article.excerpt || `An essay by Carlos Almonte on ${capFirst(article.category)}.`;
+    const img = `https://carlosalmonte.com/${author && author.photo ? author.photo : 'carlos-headshot.jpg'}`;
+    const url = `https://carlosalmonte.com/article.html?id=${article.id}`;
+
+    setTag('meta[name="description"]', 'content', desc);
+    setTag('meta[name="description"]', 'name', 'description');
+
+    [
+      ['meta[property="og:title"]', 'property', 'og:title', article.title],
+      ['meta[property="og:description"]', 'property', 'og:description', desc],
+      ['meta[property="og:image"]', 'property', 'og:image', img],
+      ['meta[property="og:url"]', 'property', 'og:url', url],
+      ['meta[property="og:type"]', 'property', 'og:type', 'article'],
+      ['meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image'],
+      ['meta[name="twitter:title"]', 'name', 'twitter:title', article.title],
+      ['meta[name="twitter:description"]', 'name', 'twitter:description', desc],
+      ['meta[name="twitter:image"]', 'name', 'twitter:image', img],
+    ].forEach(([sel, attr, val, content]) => {
+      let el = document.querySelector(sel);
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute(attr, val);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    });
+
+    // Canonical
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = url;
+  }
+
+  function renderArticle(article, author) {
+    const container = document.getElementById('article-container');
+    const authorPhotoHTML = author && author.photo
+      ? `<img src="${author.photo}" alt="${author.name}" class="author-photo">`
+      : `<div class="author-photo-placeholder">${author ? author.name.charAt(0) : 'C'}</div>`;
+
+    const authorLinkHTML = author && author.link
+      ? `<a href="${author.link}" class="author-name">${author.name}</a>`
+      : `<span class="author-name" style="pointer-events:none">${author ? author.name : 'Carlos Almonte'}</span>`;
+
+    container.innerHTML = `
+      <a href="writing.html" class="back-link">&larr; All Writing</a>
+
+      ${article.heroImage ? `<img src="${article.heroImage}" alt="${article.heroImageAlt || article.title}" class="article-hero">` : ''}
+
+      <header class="article-header">
+        <div class="article-eyebrow">
+          <span class="article-category">${capFirst(article.category)}</span>
+          ${article.series ? `<span class="article-series-badge">Series${article.seriesName ? ': ' + article.seriesName : ''}</span>` : ''}
+        </div>
+        <h1 class="article-title">${article.title}</h1>
+        ${article.excerpt ? `<p class="article-excerpt">${article.excerpt}</p>` : ''}
+        <div class="article-meta-row">
+          <span>${formatDate(article.date)}</span>
+          <div class="meta-sep"></div>
+          <span>${article.readTime} min read</span>
+          <div class="meta-sep"></div>
+          <span>${capFirst(article.category)}</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+        ${article.body || '<p style="color:var(--muted);font-style:italic;">This article is coming soon.</p>'}
+      </div>
+
+      <div class="author-strip">
+        ${authorPhotoHTML}
+        <div class="author-info">
+          <p class="author-label">About the Author</p>
+          ${authorLinkHTML}
+          <p class="author-bio">${author ? author.bio : ''}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderNotFound() {
+    document.getElementById('article-container').innerHTML = `
+      <div class="not-found">
+        <h1>Article not found</h1>
+        <p>This article may have moved or doesn't exist yet.</p>
+        <a href="writing.html" class="back-link">&larr; Back to Writing</a>
+      </div>`;
+  }
+
+  async function init() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (!id) { renderNotFound(); return; }
+
+    try {
+      const [articlesRes, authorsRes] = await Promise.all([
+        fetch('articles.json?v=' + Date.now()),
+        fetch('authors.json?v=' + Date.now())
+      ]);
+
+      const articlesData = await articlesRes.json();
+      const authorsData = await authorsRes.json();
+
+      const article = articlesData.articles.find(a => a.id === id);
+      if (!article || !article.published) { renderNotFound(); return; }
+
+      const author = authorsData.authors.find(a => a.id === article.authorId) || authorsData.authors[0];
+
+      setMeta(article, author);
+      renderArticle(article, author);
+    } catch(e) {
+      renderNotFound();
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>

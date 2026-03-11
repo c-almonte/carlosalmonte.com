@@ -11,7 +11,10 @@
       "body": "",
       "date": "2026-03-10",
       "readTime": "8",
-      "published": false
+      "published": false,
+      "authorId": "carlos-almonte",
+      "heroImage": "",
+      "heroImageAlt": ""
     },
     {
       "id": "not-cats-no-cradle-no-regrets",
@@ -24,7 +27,10 @@
       "body": "",
       "date": "2026-03-10",
       "readTime": "6",
-      "published": false
+      "published": false,
+      "authorId": "carlos-almonte",
+      "heroImage": "",
+      "heroImageAlt": ""
     },
     {
       "id": "what-happened-to-my-friends",
@@ -37,7 +43,10 @@
       "body": "",
       "date": "2026-03-10",
       "readTime": "4",
-      "published": false
+      "published": false,
+      "authorId": "carlos-almonte",
+      "heroImage": "",
+      "heroImageAlt": ""
     },
     {
       "id": "the-art-of-learning",
@@ -50,7 +59,10 @@
       "body": "",
       "date": "2026-03-10",
       "readTime": "5",
-      "published": false
+      "published": false,
+      "authorId": "carlos-almonte",
+      "heroImage": "",
+      "heroImageAlt": ""
     },
     {
       "id": "basketball-player-but-not-a-real-one",
@@ -63,7 +75,10 @@
       "body": "",
       "date": "2026-03-10",
       "readTime": "3",
-      "published": false
+      "published": false,
+      "authorId": "carlos-almonte",
+      "heroImage": "",
+      "heroImageAlt": ""
     },
     {
       "id": "accepting-invitations",
@@ -76,7 +91,10 @@
       "body": "",
       "date": "2026-03-10",
       "readTime": "4",
-      "published": false
+      "published": false,
+      "authorId": "carlos-almonte",
+      "heroImage": "",
+      "heroImageAlt": ""
     },
     {
       "id": "brand-start-by-looking-inward",
@@ -89,7 +107,10 @@
       "body": "",
       "date": "2026-03-10",
       "readTime": "6",
-      "published": false
+      "published": false,
+      "authorId": "carlos-almonte",
+      "heroImage": "",
+      "heroImageAlt": ""
     },
     {
       "id": "vision-vs-execution",
@@ -102,7 +123,10 @@
       "body": "",
       "date": "2026-03-10",
       "readTime": "5",
-      "published": false
+      "published": false,
+      "authorId": "carlos-almonte",
+      "heroImage": "",
+      "heroImageAlt": ""
     },
     {
       "id": "basketball-diaries",
@@ -115,7 +139,10 @@
       "body": "",
       "date": "2026-03-10",
       "readTime": "Ongoing",
-      "published": false
+      "published": false,
+      "authorId": "carlos-almonte",
+      "heroImage": "",
+      "heroImageAlt": ""
     },
     {
       "id": "what-jazz-taught-me",
@@ -128,7 +155,10 @@
       "body": "",
       "date": "2026-03-10",
       "readTime": "8",
-      "published": false
+      "published": false,
+      "authorId": "carlos-almonte",
+      "heroImage": "",
+      "heroImageAlt": ""
     }
   ]
 }

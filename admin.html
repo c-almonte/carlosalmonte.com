@@ -134,6 +134,50 @@
 
   .btn-publish:hover { opacity: 0.9; }
 
+  .btn-unpublish {
+    background: none;
+    color: var(--danger);
+    border: 1px solid rgba(192,57,43,0.25);
+  }
+
+  .btn-unpublish:hover { background: rgba(192,57,43,0.06); }
+
+  .toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .toggle {
+    width: 40px;
+    height: 22px;
+    background: rgba(30,33,40,0.12);
+    border-radius: 11px;
+    position: relative;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .toggle.on { background: var(--accent); }
+
+  .toggle::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: white;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+
+  .toggle.on::after { transform: translateX(18px); }
+
   .btn-draft {
     background: white;
     color: var(--ink);
@@ -354,6 +398,62 @@
     margin-top: 4px;
   }
 
+
+  /* IMAGE TOOLS */
+  .img-toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+
+  .img-btn {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: white;
+    border: 1px solid rgba(30,33,40,0.12);
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .img-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+  .hero-preview {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-top: 10px;
+    display: none;
+  }
+
+  .hero-preview.visible { display: block; }
+
+  .img-helper {
+    background: rgba(30,33,40,0.03);
+    border: 1px solid rgba(30,33,40,0.08);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .img-helper code {
+    background: rgba(30,33,40,0.06);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--ink);
+  }
   /* TOKEN SETUP */
   .token-banner {
     background: rgba(196,116,90,0.08);
@@ -543,7 +643,7 @@
   // INIT
   async function init() {
     checkToken();
-    await loadArticles();
+    await Promise.all([loadArticles(), loadAuthors()]);
     renderList();
   }
 
@@ -579,6 +679,22 @@
     dot.classList.add('connected');
     text.textContent = 'GitHub connected';
     toast('Token saved. Ready to publish.', 'success');
+  }
+
+  // LOAD AUTHORS
+  async function loadAuthors() {
+    try {
+      const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/authors.json`, {
+        headers: githubToken ? { Authorization: `token ${githubToken}` } : {}
+      });
+      const data = await res.json();
+      const decoded = atob(data.content.replace(/\n/g, ''));
+      const parsed = JSON.parse(decoded);
+      window._authors = parsed.authors;
+      window._authorsSha = data.sha;
+    } catch(e) {
+      window._authors = [{ id: 'carlos-almonte', name: 'Carlos Almonte' }];
+    }
   }
 
   // LOAD ARTICLES FROM GITHUB
@@ -652,8 +768,11 @@
         <h2 class="editor-title">${isNew ? 'New Article' : 'Edit Article'}</h2>
         <div class="editor-actions">
           ${!isNew ? `<button class="btn btn-delete" onclick="deleteArticle('${a.id}')">Delete</button>` : ''}
-          <button class="btn btn-draft" onclick="saveArticle(false)">Save Draft</button>
-          <button class="btn btn-publish" onclick="saveArticle(true)">Publish</button>
+          <button class="btn btn-draft" onclick="saveArticle('draft')">Save Draft</button>
+          ${a.published
+            ? `<button class="btn btn-unpublish" onclick="saveArticle('unpublish')">Unpublish</button>`
+            : `<button class="btn btn-publish" onclick="saveArticle('publish')">Publish</button>`
+          }
         </div>
       </div>
 
@@ -682,6 +801,15 @@
           <input type="date" id="f-date" value="${a.date}">
         </div>
 
+        <div class="form-group">
+          <label>Author</label>
+          <select id="f-author">
+            ${(window._authors || []).map(au =>
+              `<option value="${au.id}" ${a.authorId === au.id ? 'selected' : ''}>${au.name}</option>`
+            ).join('')}
+          </select>
+        </div>
+
         <div class="form-group" style="display:flex;align-items:center;gap:24px;padding-top:24px;">
           <label style="display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:14px;cursor:pointer;">
             <input type="checkbox" id="f-featured" ${a.featured ? 'checked' : ''} style="width:auto;">
@@ -699,21 +827,46 @@
         </div>
 
         <div class="form-group form-group-full">
+          <label>Hero Image <span style="font-weight:300;text-transform:none;letter-spacing:0;">(filename only — must be in your repo folder)</span></label>
+          <input type="text" id="f-hero" value="${escHtml(a.heroImage || '')}" placeholder="e.g. my-photo.jpg" oninput="previewHero(this.value)">
+          <img id="hero-preview" class="hero-preview ${a.heroImage ? 'visible' : ''}" src="${a.heroImage || ''}" alt="Hero preview">
+        </div>
+
+        <div class="form-group form-group-full">
+          <label>Hero Image Alt Text</label>
+          <input type="text" id="f-hero-alt" value="${escHtml(a.heroImageAlt || '')}" placeholder="Describe the image for accessibility">
+        </div>
+
+        <div class="form-group form-group-full">
           <label>Excerpt <span style="font-weight:300;text-transform:none;letter-spacing:0;">(shown on writing page)</span></label>
           <textarea id="f-excerpt" rows="4" placeholder="A short description of the article...">${escHtml(a.excerpt)}</textarea>
         </div>
 
         <div class="form-group form-group-full">
           <label>Body <span style="font-weight:300;text-transform:none;letter-spacing:0;">(full article -- supports basic HTML)</span></label>
+          <div class="img-toolbar">
+            <button type="button" class="img-btn" onclick="insertImg('full')">+ Image Full Width</button>
+            <button type="button" class="img-btn" onclick="insertImg('left')">+ Image Left</button>
+            <button type="button" class="img-btn" onclick="insertImg('right')">+ Image Right</button>
+            <button type="button" class="img-btn" onclick="insertImg('captioned')">+ Image with Caption</button>
+          </div>
           <textarea id="f-body" rows="24" placeholder="Write your article here. You can use basic HTML like &lt;p&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;h2&gt;, &lt;blockquote&gt;...">${escHtml(a.body)}</textarea>
+          <div class="img-helper">
+            <strong>Image tips:</strong> Upload image files to your repo folder first, then reference by filename.<br>
+            Buttons above insert image tags at your cursor. Replace <code>filename.jpg</code> with your actual filename.<br>
+            Classes: <code>img-full</code> &nbsp;|&nbsp; <code>img-left</code> &nbsp;|&nbsp; <code>img-right</code> &nbsp;|&nbsp; <code>img-captioned</code>
+          </div>
         </div>
       </div>
 
       <div class="divider"></div>
 
       <div style="display:flex;justify-content:flex-end;gap:12px;">
-        <button class="btn btn-draft" onclick="saveArticle(false)">Save Draft</button>
-        <button class="btn btn-publish" onclick="saveArticle(true)">Publish to Site</button>
+        <button class="btn btn-draft" onclick="saveArticle('draft')">Save Draft</button>
+        <button id="bottom-publish-btn" class="btn ${a.published ? 'btn-unpublish' : 'btn-publish'}"
+          onclick="saveArticle('${a.published ? 'unpublish' : 'publish'}')">
+          ${a.published ? 'Unpublish' : 'Publish to Site'}
+        </button>
       </div>
     `;
   }
@@ -724,16 +877,20 @@
   }
 
   // SAVE ARTICLE
-  async function saveArticle(publish) {
+  async function saveArticle(action) {
     const title = document.getElementById('f-title').value.trim();
     if (!title) { toast('Title is required.', 'error'); return; }
     if (!githubToken) { toast('GitHub token needed to save. Add it above.', 'error'); showTokenBanner(); return; }
+
+    const existingArticle = articles.find(a => a.id === currentId) || {};
+    const isPublished = action === 'publish' ? true : action === 'unpublish' ? false : existingArticle.published || false;
 
     const id = currentId || slugify(title);
     const updated = {
       id,
       title,
       category: document.getElementById('f-category').value,
+      authorId: document.getElementById('f-author') ? document.getElementById('f-author').value : 'carlos-almonte',
       featured: document.getElementById('f-featured').checked,
       series: document.getElementById('f-series').checked,
       seriesName: document.getElementById('f-seriesname') ? document.getElementById('f-seriesname').value.trim() : '',
@@ -741,7 +898,9 @@
       body: document.getElementById('f-body').value.trim(),
       date: document.getElementById('f-date').value,
       readTime: document.getElementById('f-readtime').value.trim(),
-      published: publish
+      published: isPublished,
+      heroImage: document.getElementById('f-hero') ? document.getElementById('f-hero').value.trim() : '',
+      heroImageAlt: document.getElementById('f-hero-alt') ? document.getElementById('f-hero-alt').value.trim() : ''
     };
 
     if (currentId) {
@@ -754,7 +913,9 @@
 
     await pushToGitHub();
     renderList();
-    toast(publish ? 'Published! Site updating...' : 'Saved as draft.', 'success');
+    const msg = action === 'publish' ? 'Published! Site updating...' : action === 'unpublish' ? 'Unpublished.' : 'Saved as draft.';
+    toast(msg, 'success');
+    renderEditor(updated);
   }
 
   // DELETE ARTICLE
@@ -801,6 +962,39 @@
   }
 
   // HELPERS
+  function previewHero(val) {
+    const img = document.getElementById('hero-preview');
+    if (!img) return;
+    if (val) {
+      img.src = val;
+      img.classList.add('visible');
+    } else {
+      img.classList.remove('visible');
+    }
+  }
+
+  function insertImg(type) {
+    const textarea = document.getElementById('f-body');
+    if (!textarea) return;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+
+    let snippet = '';
+    if (type === 'full') {
+      snippet = '\n<img src="filename.jpg" alt="Description" class="img-full">\n';
+    } else if (type === 'left') {
+      snippet = '\n<img src="filename.jpg" alt="Description" class="img-left">\n';
+    } else if (type === 'right') {
+      snippet = '\n<img src="filename.jpg" alt="Description" class="img-right">\n';
+    } else if (type === 'captioned') {
+      snippet = '\n<figure class="img-captioned">\n  <img src="filename.jpg" alt="Description">\n  <figcaption>Your caption here</figcaption>\n</figure>\n';
+    }
+
+    textarea.value = textarea.value.substring(0, start) + snippet + textarea.value.substring(end);
+    textarea.selectionStart = textarea.selectionEnd = start + snippet.length;
+    textarea.focus();
+  }
+
   function slugify(str) {
     return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   }
