@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Carlos Almonte</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink: #1e2128;
+    --paper: #f4f5f7;
+    --warm: #e8eaed;
+    --gold: #c4745a;
+    --accent: #2c4a3e;
+    --muted: #6b7280;
+    --white: #ffffff;
+    --danger: #c0392b;
+    --success: #2c4a3e;
+  }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* LOGIN */
+  #login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .login-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--ink);
+    letter-spacing: 0.05em;
+  }
+
+  .login-box {
+    background: white;
+    border-radius: 6px;
+    padding: 48px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 24px rgba(30,33,40,0.08);
+  }
+
+  .login-title {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  input, textarea, select {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid rgba(30,33,40,0.12);
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--gold);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 200px;
+    line-height: 1.6;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 28px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: white;
+    width: 100%;
+  }
+
+  .btn-primary:hover { background: var(--accent); }
+
+  .btn-publish {
+    background: var(--accent);
+    color: white;
+  }
+
+  .btn-publish:hover { opacity: 0.9; }
+
+  .btn-draft {
+    background: white;
+    color: var(--ink);
+    border: 1px solid rgba(30,33,40,0.15);
+  }
+
+  .btn-draft:hover { border-color: var(--ink); }
+
+  .btn-delete {
+    background: none;
+    color: var(--danger);
+    border: 1px solid rgba(192,57,43,0.2);
+    font-size: 11px;
+    padding: 8px 16px;
+  }
+
+  .btn-delete:hover { background: rgba(192,57,43,0.05); }
+
+  .btn-edit {
+    background: none;
+    color: var(--muted);
+    border: 1px solid rgba(30,33,40,0.12);
+    font-size: 11px;
+    padding: 8px 16px;
+  }
+
+  .btn-edit:hover { color: var(--ink); border-color: var(--ink); }
+
+  .login-error {
+    color: var(--danger);
+    font-size: 13px;
+    margin-top: 12px;
+    display: none;
+  }
+
+  /* ADMIN UI */
+  #admin-screen { display: none; }
+
+  .admin-nav {
+    background: var(--ink);
+    padding: 16px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .admin-nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 300;
+    color: rgba(244,245,247,0.8);
+    letter-spacing: 0.05em;
+  }
+
+  .admin-nav-badge {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(196,116,90,0.3);
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  .admin-logout {
+    font-size: 12px;
+    color: rgba(244,245,247,0.4);
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    font-family: 'Outfit', sans-serif;
+    transition: color 0.2s;
+  }
+
+  .admin-logout:hover { color: rgba(244,245,247,0.8); }
+
+  .admin-body {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    min-height: calc(100vh - 60px);
+  }
+
+  /* SIDEBAR -- article list */
+  .sidebar {
+    background: white;
+    border-right: 1px solid rgba(30,33,40,0.08);
+    overflow-y: auto;
+    max-height: calc(100vh - 60px);
+    position: sticky;
+    top: 0;
+  }
+
+  .sidebar-header {
+    padding: 24px 28px 16px;
+    border-bottom: 1px solid rgba(30,33,40,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .sidebar-title {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .btn-new {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(196,116,90,0.08);
+    border: 1px solid rgba(196,116,90,0.2);
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .btn-new:hover { background: rgba(196,116,90,0.15); }
+
+  .article-list-item {
+    padding: 18px 28px;
+    border-bottom: 1px solid rgba(30,33,40,0.05);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .article-list-item:hover { background: var(--paper); }
+  .article-list-item.active { background: rgba(196,116,90,0.06); border-left: 2px solid var(--gold); }
+
+  .list-item-title {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+
+  .list-item-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .status-pill {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  .status-published {
+    background: rgba(44,74,62,0.1);
+    color: var(--accent);
+  }
+
+  .status-draft {
+    background: rgba(107,114,128,0.1);
+    color: var(--muted);
+  }
+
+  /* EDITOR */
+  .editor {
+    padding: 48px;
+    overflow-y: auto;
+    max-height: calc(100vh - 60px);
+  }
+
+  .editor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .editor-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--ink);
+  }
+
+  .editor-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .form-group-full {
+    grid-column: span 2;
+    margin-bottom: 0;
+  }
+
+  .char-count {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 4px;
+  }
+
+  /* TOKEN SETUP */
+  .token-banner {
+    background: rgba(196,116,90,0.08);
+    border: 1px solid rgba(196,116,90,0.2);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    display: none;
+  }
+
+  .token-banner.visible { display: block; }
+
+  .token-banner p {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .token-banner strong { color: var(--gold); }
+
+  .token-input-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .token-input-row input {
+    flex: 1;
+    font-family: monospace;
+    font-size: 13px;
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    padding: 16px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 400;
+    z-index: 999;
+    display: none;
+    animation: slideUp 0.3s ease;
+  }
+
+  .toast.success { background: var(--accent); color: white; }
+  .toast.error { background: var(--danger); color: white; }
+  .toast.visible { display: block; }
+
+  @keyframes slideUp {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .divider {
+    height: 1px;
+    background: rgba(30,33,40,0.08);
+    margin: 32px 0;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 80px 40px;
+    color: var(--muted);
+  }
+
+  .empty-state h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+
+  .empty-state p { font-size: 15px; line-height: 1.6; }
+
+  .github-status {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+  }
+
+  .status-dot.connected { background: #27ae60; }
+  .status-dot.error { background: var(--danger); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-logo">Carlos Almonte</div>
+  <div class="login-box">
+    <p class="login-title">Content Admin</p>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="Enter password" onkeydown="if(event.key==='Enter') login()">
+    </div>
+    <button class="btn btn-primary" onclick="login()">Sign In</button>
+    <p class="login-error" id="login-error">Incorrect password. Try again.</p>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin-screen">
+  <div class="admin-nav">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <span class="admin-nav-logo">Carlos Almonte</span>
+      <span class="admin-nav-badge">Admin</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:24px;">
+      <span class="github-status"><span class="status-dot" id="github-dot"></span><span id="github-status-text">Checking GitHub...</span></span>
+      <button class="admin-logout" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="admin-body">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-title">Articles</span>
+        <button class="btn-new" onclick="newArticle()">+ New</button>
+      </div>
+      <div id="article-list"></div>
+    </div>
+
+    <!-- EDITOR -->
+    <div class="editor" id="editor">
+      <div class="empty-state">
+        <h3>Select an article</h3>
+        <p>Choose an article from the list to edit,<br>or create a new one.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GITHUB TOKEN SETUP -->
+<div class="token-banner" id="token-banner">
+  <p>To publish articles, paste your <strong>GitHub Personal Access Token</strong> below. This is stored only in your browser and never shared.</p>
+  <div class="token-input-row">
+    <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+    <button class="btn btn-draft" onclick="saveToken()" style="width:auto;white-space:nowrap;">Save Token</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // CONFIG
+  const ADMIN_PASSWORD = '24ZKJqX!ZMc@kRJXE72hL';
+  const GITHUB_USER = 'c-almonte';
+  const GITHUB_REPO = 'carlosalmonte.com';
+  const ARTICLES_PATH = 'articles.json';
+
+  let articles = [];
+  let currentId = null;
+  let githubToken = localStorage.getItem('ca_github_token') || '';
+
+  // AUTH
+  function login() {
+    const pw = document.getElementById('login-password').value;
+    if (pw === ADMIN_PASSWORD) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-screen').style.display = 'block';
+      init();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+    }
+  }
+
+  function logout() {
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('admin-screen').style.display = 'none';
+    document.getElementById('login-password').value = '';
+  }
+
+  // INIT
+  async function init() {
+    checkToken();
+    await loadArticles();
+    renderList();
+  }
+
+  function checkToken() {
+    const dot = document.getElementById('github-dot');
+    const text = document.getElementById('github-status-text');
+    if (githubToken) {
+      dot.classList.add('connected');
+      text.textContent = 'GitHub connected';
+    } else {
+      dot.classList.add('error');
+      text.textContent = 'GitHub token needed';
+      showTokenBanner();
+    }
+  }
+
+  function showTokenBanner() {
+    const banner = document.getElementById('token-banner');
+    banner.classList.add('visible');
+    const editor = document.getElementById('editor');
+    editor.prepend(banner);
+  }
+
+  function saveToken() {
+    const token = document.getElementById('token-input').value.trim();
+    if (!token) return;
+    githubToken = token;
+    localStorage.setItem('ca_github_token', token);
+    document.getElementById('token-banner').classList.remove('visible');
+    const dot = document.getElementById('github-dot');
+    const text = document.getElementById('github-status-text');
+    dot.classList.remove('error');
+    dot.classList.add('connected');
+    text.textContent = 'GitHub connected';
+    toast('Token saved. Ready to publish.', 'success');
+  }
+
+  // LOAD ARTICLES FROM GITHUB
+  async function loadArticles() {
+    try {
+      const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${ARTICLES_PATH}`, {
+        headers: githubToken ? { Authorization: `token ${githubToken}` } : {}
+      });
+      const data = await res.json();
+      const decoded = atob(data.content.replace(/\n/g, ''));
+      const parsed = JSON.parse(decoded);
+      articles = parsed.articles;
+      window._fileSha = data.sha;
+    } catch (e) {
+      toast('Could not load articles from GitHub.', 'error');
+      articles = [];
+    }
+  }
+
+  // RENDER SIDEBAR LIST
+  function renderList() {
+    const list = document.getElementById('article-list');
+    if (!articles.length) {
+      list.innerHTML = '<div style="padding:24px 28px;color:#6b7280;font-size:14px;">No articles yet.</div>';
+      return;
+    }
+    list.innerHTML = articles.map(a => `
+      <div class="article-list-item ${a.id === currentId ? 'active' : ''}" onclick="editArticle('${a.id}')">
+        <div class="list-item-title">${a.title}</div>
+        <div class="list-item-meta">
+          <span class="status-pill ${a.published ? 'status-published' : 'status-draft'}">${a.published ? 'Published' : 'Draft'}</span>
+          <span>${a.category}</span>
+          ${a.series ? '<span>Series</span>' : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // EDIT ARTICLE
+  function editArticle(id) {
+    currentId = id;
+    const a = articles.find(x => x.id === id);
+    renderList();
+    renderEditor(a);
+  }
+
+  // NEW ARTICLE
+  function newArticle() {
+    const blank = {
+      id: '',
+      title: '',
+      category: 'faith',
+      featured: false,
+      series: false,
+      seriesName: '',
+      excerpt: '',
+      body: '',
+      date: new Date().toISOString().split('T')[0],
+      readTime: '5',
+      published: false
+    };
+    currentId = null;
+    renderEditor(blank, true);
+  }
+
+  // RENDER EDITOR
+  function renderEditor(a, isNew = false) {
+    const editor = document.getElementById('editor');
+    editor.innerHTML = `
+      <div class="editor-header">
+        <h2 class="editor-title">${isNew ? 'New Article' : 'Edit Article'}</h2>
+        <div class="editor-actions">
+          ${!isNew ? `<button class="btn btn-delete" onclick="deleteArticle('${a.id}')">Delete</button>` : ''}
+          <button class="btn btn-draft" onclick="saveArticle(false)">Save Draft</button>
+          <button class="btn btn-publish" onclick="saveArticle(true)">Publish</button>
+        </div>
+      </div>
+
+      <div class="editor-grid">
+        <div class="form-group form-group-full">
+          <label>Title</label>
+          <input type="text" id="f-title" value="${escHtml(a.title)}" placeholder="Article title">
+        </div>
+
+        <div class="form-group">
+          <label>Category</label>
+          <select id="f-category">
+            ${['faith','family','music','strategy','vocation','life'].map(c =>
+              `<option value="${c}" ${a.category === c ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`
+            ).join('')}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Read Time (minutes)</label>
+          <input type="text" id="f-readtime" value="${escHtml(a.readTime)}" placeholder="5">
+        </div>
+
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="f-date" value="${a.date}">
+        </div>
+
+        <div class="form-group" style="display:flex;align-items:center;gap:24px;padding-top:24px;">
+          <label style="display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:14px;cursor:pointer;">
+            <input type="checkbox" id="f-featured" ${a.featured ? 'checked' : ''} style="width:auto;">
+            Featured article
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:14px;cursor:pointer;">
+            <input type="checkbox" id="f-series" ${a.series ? 'checked' : ''} style="width:auto;" onchange="toggleSeriesName()">
+            Part of a series
+          </label>
+        </div>
+
+        <div class="form-group" id="series-name-group" style="${a.series ? '' : 'display:none'}">
+          <label>Series Name</label>
+          <input type="text" id="f-seriesname" value="${escHtml(a.seriesName)}" placeholder="e.g. Basketball Diaries">
+        </div>
+
+        <div class="form-group form-group-full">
+          <label>Excerpt <span style="font-weight:300;text-transform:none;letter-spacing:0;">(shown on writing page)</span></label>
+          <textarea id="f-excerpt" rows="4" placeholder="A short description of the article...">${escHtml(a.excerpt)}</textarea>
+        </div>
+
+        <div class="form-group form-group-full">
+          <label>Body <span style="font-weight:300;text-transform:none;letter-spacing:0;">(full article -- supports basic HTML)</span></label>
+          <textarea id="f-body" rows="24" placeholder="Write your article here. You can use basic HTML like &lt;p&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;h2&gt;, &lt;blockquote&gt;...">${escHtml(a.body)}</textarea>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div style="display:flex;justify-content:flex-end;gap:12px;">
+        <button class="btn btn-draft" onclick="saveArticle(false)">Save Draft</button>
+        <button class="btn btn-publish" onclick="saveArticle(true)">Publish to Site</button>
+      </div>
+    `;
+  }
+
+  function toggleSeriesName() {
+    const checked = document.getElementById('f-series').checked;
+    document.getElementById('series-name-group').style.display = checked ? '' : 'none';
+  }
+
+  // SAVE ARTICLE
+  async function saveArticle(publish) {
+    const title = document.getElementById('f-title').value.trim();
+    if (!title) { toast('Title is required.', 'error'); return; }
+    if (!githubToken) { toast('GitHub token needed to save. Add it above.', 'error'); showTokenBanner(); return; }
+
+    const id = currentId || slugify(title);
+    const updated = {
+      id,
+      title,
+      category: document.getElementById('f-category').value,
+      featured: document.getElementById('f-featured').checked,
+      series: document.getElementById('f-series').checked,
+      seriesName: document.getElementById('f-seriesname') ? document.getElementById('f-seriesname').value.trim() : '',
+      excerpt: document.getElementById('f-excerpt').value.trim(),
+      body: document.getElementById('f-body').value.trim(),
+      date: document.getElementById('f-date').value,
+      readTime: document.getElementById('f-readtime').value.trim(),
+      published: publish
+    };
+
+    if (currentId) {
+      const idx = articles.findIndex(a => a.id === currentId);
+      articles[idx] = updated;
+    } else {
+      articles.unshift(updated);
+      currentId = id;
+    }
+
+    await pushToGitHub();
+    renderList();
+    toast(publish ? 'Published! Site updating...' : 'Saved as draft.', 'success');
+  }
+
+  // DELETE ARTICLE
+  async function deleteArticle(id) {
+    if (!confirm('Delete this article? This cannot be undone.')) return;
+    articles = articles.filter(a => a.id !== id);
+    currentId = null;
+    await pushToGitHub();
+    renderList();
+    document.getElementById('editor').innerHTML = `
+      <div class="empty-state">
+        <h3>Article deleted</h3>
+        <p>Select another article or create a new one.</p>
+      </div>`;
+    toast('Article deleted.', 'success');
+  }
+
+  // PUSH TO GITHUB
+  async function pushToGitHub() {
+    const content = JSON.stringify({ articles }, null, 2);
+    const encoded = btoa(unescape(encodeURIComponent(content)));
+
+    try {
+      const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${ARTICLES_PATH}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${githubToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: `CMS update: ${new Date().toLocaleString()}`,
+          content: encoded,
+          sha: window._fileSha
+        })
+      });
+
+      if (!res.ok) throw new Error('GitHub API error');
+      const data = await res.json();
+      window._fileSha = data.content.sha;
+    } catch (e) {
+      toast('GitHub push failed. Check your token.', 'error');
+      throw e;
+    }
+  }
+
+  // HELPERS
+  function slugify(str) {
+    return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+
+  function escHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function toast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} visible`;
+    setTimeout(() => t.classList.remove('visible'), 3500);
+  }
+</script>
+</body>
+</html>

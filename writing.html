@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writing | Carlos Almonte — Thoughts on Faith, Family, Music & Strategy</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+<!-- SEO -->
+<meta name="description" content="Essays and reflections by Carlos Almonte on faith, family, music, strategy, vocation, and life. Honest writing from someone who's been paying attention.">
+<meta name="author" content="Carlos Almonte">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://carlosalmonte.com/writing.html">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://carlosalmonte.com/writing.html">
+<meta property="og:title" content="Writing | Carlos Almonte">
+<meta property="og:description" content="Essays and reflections on faith, family, music, strategy, vocation, and life.">
+<meta property="og:image" content="https://carlosalmonte.com/carlos-headshot.jpg">
+<meta property="og:site_name" content="Carlos Almonte">
+
+<!-- Twitter/X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Writing | Carlos Almonte">
+<meta name="twitter:description" content="Essays and reflections on faith, family, music, strategy, vocation, and life.">
+<meta name="twitter:image" content="https://carlosalmonte.com/carlos-headshot.jpg">
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink: #1e2128;
+    --warm: #e8eaed;
+    --paper: #f4f5f7;
+    --gold: #c4745a;
+    --muted: #6b7280;
+    --accent: #2c4a3e;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* GRAIN */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  nav.scrolled {
+    background: rgba(244,245,247,0.96);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 1px 0 rgba(30,33,40,0.06);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a.active {
+    color: var(--gold);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+  }
+
+  /* HERO */
+  .writing-hero {
+    padding: 140px 48px 60px;
+    max-width: 900px;
+  }
+
+  .hero-eyebrow {
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 5vw, 76px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-intro {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 600px;
+  }
+
+  /* FEATURED ARTICLE */
+  .featured-wrap {
+    margin: 0 48px 80px;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--ink);
+    min-height: 500px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .featured-image {
+    position: relative;
+    overflow: hidden;
+    min-height: 500px;
+  }
+
+  .featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.7;
+    transition: opacity 0.4s ease;
+  }
+
+  .featured-wrap:hover .featured-image img { opacity: 0.85; }
+
+  .featured-image-fallback {
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+    background: linear-gradient(135deg, #2c4a3e 0%, #1e2128 60%, #3a2820 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .featured-image-fallback .bg-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 180px;
+    font-weight: 300;
+    color: rgba(196,116,90,0.12);
+    letter-spacing: -0.05em;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .featured-content {
+    padding: 64px 56px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
+  .featured-tag {
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .featured-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 3vw, 42px);
+    font-weight: 300;
+    line-height: 1.15;
+    color: #f4f5f7;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .featured-excerpt {
+    font-size: 16px;
+    line-height: 1.75;
+    color: rgba(244,245,247,0.65);
+    margin-bottom: 40px;
+  }
+
+  .featured-meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .featured-meta-item {
+    font-size: 13px;
+    color: rgba(244,245,247,0.4);
+    letter-spacing: 0.08em;
+  }
+
+  .featured-meta-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(244,245,247,0.2);
+  }
+
+  .btn-featured {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(196,116,90,0.3);
+    padding-bottom: 4px;
+    transition: border-color 0.2s, gap 0.2s;
+    width: fit-content;
+  }
+
+  .btn-featured:hover {
+    border-color: var(--gold);
+    gap: 14px;
+  }
+
+  /* FILTER BAR */
+  .filter-section {
+    padding: 0 48px 48px;
+  }
+
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(30,33,40,0.08);
+    padding-bottom: 32px;
+    margin-bottom: 48px;
+  }
+
+  .filter-btn {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: none;
+    border: 1px solid transparent;
+    padding: 8px 20px;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .filter-btn:hover {
+    color: var(--ink);
+    border-color: rgba(30,33,40,0.15);
+  }
+
+  .filter-btn.active {
+    color: var(--gold);
+    border-color: var(--gold);
+    background: rgba(196,116,90,0.06);
+  }
+
+  /* MOSAIC GRID */
+  .mosaic {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  /* Card base */
+  .article-card {
+    background: white;
+    border-radius: 4px;
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .article-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .article-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(30,33,40,0.08);
+  }
+
+  .article-card:hover::after { transform: scaleX(1); }
+
+  /* Grid spans */
+  .card-wide { grid-column: span 8; }
+  .card-narrow { grid-column: span 4; }
+  .card-third { grid-column: span 4; }
+  .card-half { grid-column: span 6; }
+  .card-full { grid-column: span 12; }
+
+  .article-tag {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .series-badge {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 2px 7px;
+    border-radius: 20px;
+    opacity: 0.8;
+  }
+
+  .article-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  .card-wide .article-title { font-size: 32px; }
+  .card-narrow .article-title { font-size: 22px; }
+
+  .article-excerpt {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-bottom: 28px;
+    flex: 1;
+  }
+
+  .card-narrow .article-excerpt { display: none; }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: rgba(30,33,40,0.3);
+    letter-spacing: 0.06em;
+  }
+
+  .meta-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(30,33,40,0.2);
+  }
+
+  /* PULL QUOTE CARD */
+  .quote-card {
+    grid-column: span 12;
+    background: var(--accent);
+    border-radius: 4px;
+    padding: 64px 80px;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .quote-mark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 120px;
+    font-weight: 300;
+    color: rgba(196,116,90,0.3);
+    line-height: 0.8;
+    flex-shrink: 0;
+    margin-top: -20px;
+  }
+
+  .quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(24px, 2.5vw, 36px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.4;
+    color: rgba(244,245,247,0.9);
+    letter-spacing: -0.01em;
+  }
+
+  .quote-source {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 16px;
+  }
+
+
+  /* COMING SOON */
+  .coming-soon {
+    position: relative;
+  }
+
+  .coming-soon-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid rgba(107,114,128,0.25);
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--paper);
+  }
+
+  .coming-soon {
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .coming-soon:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .coming-soon::after { display: none; }
+
+  /* HIDDEN state for filter */
+  .article-card.hidden,
+  .quote-card.hidden { display: none; }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    padding: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 80px;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 300;
+    color: rgba(244,245,247,0.6);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(244,245,247,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: rgba(244,245,247,0.8); }
+  .footer-copy { font-size: 15px; color: rgba(244,245,247,0.2); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .writing-hero { padding: 120px 24px 48px; }
+    .featured-wrap { grid-template-columns: 1fr; margin: 0 24px 48px; }
+    .featured-image { min-height: 280px; }
+    .featured-content { padding: 40px 32px; }
+    .filter-section { padding: 0 24px 32px; }
+    .mosaic { grid-template-columns: 1fr; gap: 16px; }
+    .card-wide, .card-narrow, .card-third, .card-half, .card-full { grid-column: span 1; }
+    .card-narrow .article-excerpt { display: block; }
+    .quote-card { padding: 40px 32px; flex-direction: column; gap: 16px; }
+    .quote-mark { font-size: 72px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+    .footer-links { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Carlos Almonte</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="writing.html" class="active">Writing</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="#">Events</a></li>
+    <li><a href="#">Connect</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="writing-hero">
+  <p class="hero-eyebrow">Thinking Out Loud</p>
+  <h1 class="hero-title">Words on the things<br>that <em>keep me up at night.</em></h1>
+  <p class="hero-intro">Faith. Family. Music. Strategy. Vocation. Life. Not a content calendar. Just honest writing from someone who's been paying attention.</p>
+</section>
+
+<!-- FEATURED ARTICLE -->
+<div id="featured-wrap"></div>
+
+<!-- FILTER + MOSAIC -->
+<section class="filter-section">
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="faith">Faith</button>
+    <button class="filter-btn" data-filter="family">Family</button>
+    <button class="filter-btn" data-filter="music">Music</button>
+    <button class="filter-btn" data-filter="strategy">Strategy</button>
+    <button class="filter-btn" data-filter="vocation">Vocation</button>
+    <button class="filter-btn" data-filter="life">Life</button>
+  </div>
+  <div class="mosaic" id="mosaic"></div>
+</section>
+
+<footer>
+  <div class="footer-logo">Carlos Almonte</div>
+  <ul class="footer-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="writing.html">Writing</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="https://motevo.co" target="_blank">Motevo Co</a></li>
+    <li><a href="#">Connect</a></li>
+  </ul>
+  <p class="footer-copy">&copy; 2026 Carlos Almonte</p>
+</footer>
+
+<script>
+  // Nav scroll
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Card size rotation for mosaic
+  const sizePattern = ['card-wide','card-narrow','card-narrow','card-wide','card-third','card-third','card-third','card-half','card-half'];
+
+  function capFirst(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function formatDate(d) {
+    const date = new Date(d);
+    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  }
+
+  async function loadAndRender() {
+    let articles = [];
+    try {
+      const res = await fetch('articles.json?v=' + Date.now());
+      const data = await res.json();
+      articles = data.articles;
+    } catch(e) {
+      console.warn('Could not load articles.json');
+    }
+
+    const published = articles.filter(a => a.published);
+    const drafts = articles.filter(a => !a.published);
+
+    // FEATURED
+    const featuredWrap = document.getElementById('featured-wrap');
+    const featured = published.find(a => a.featured) || articles.find(a => a.featured);
+    if (featured) {
+      const isLive = featured.published;
+      featuredWrap.innerHTML = `
+        <div class="featured-wrap reveal">
+          <div class="featured-image">
+            <div class="featured-image-fallback">
+              <span class="bg-text">${capFirst(featured.category).charAt(0)}</span>
+            </div>
+          </div>
+          <div class="featured-content">
+            <p class="featured-tag">Featured &nbsp;&middot;&nbsp; ${capFirst(featured.category)}</p>
+            <h2 class="featured-title">${featured.title}</h2>
+            <p class="featured-excerpt">${featured.excerpt}</p>
+            <div class="featured-meta">
+              <span class="featured-meta-item">${featured.readTime} min read</span>
+              <div class="featured-meta-dot"></div>
+              <span class="featured-meta-item">${formatDate(featured.date)}</span>
+            </div>
+            ${isLive
+              ? `<a href="article.html?id=${featured.id}" class="btn-featured">Read the essay &rarr;</a>`
+              : `<a href="#" class="btn-featured" style="opacity:0.5;pointer-events:none;">Coming Soon &rarr;</a>`
+            }
+          </div>
+        </div>`;
+    }
+
+    // MOSAIC -- published first, then drafts as coming soon
+    const mosaic = document.getElementById('mosaic');
+
+    // Pull quote always first
+    const quoteHTML = `
+      <div class="quote-card reveal" data-category="all">
+        <div class="quote-mark">&ldquo;</div>
+        <div>
+          <p class="quote-text">The notes you don't play are as important as the ones you do.</p>
+          <p class="quote-source">A Jazz Principle. A Life Principle.</p>
+        </div>
+      </div>`;
+
+    const allCards = [...published.filter(a => !a.featured), ...drafts];
+    let cardHTML = '';
+    let quoteInserted = false;
+
+    allCards.forEach((a, i) => {
+      // Insert pull quote after 2nd card
+      if (i === 2 && !quoteInserted) {
+        cardHTML += quoteHTML;
+        quoteInserted = true;
+      }
+
+      const size = sizePattern[i % sizePattern.length];
+      const isLive = a.published;
+      const showExcerpt = (size === 'card-wide' || size === 'card-half') && a.excerpt;
+
+      cardHTML += `
+        <a href="${isLive ? `article.html?id=${a.id}` : '#'}"
+          class="article-card ${isLive ? '' : 'coming-soon'} ${size} reveal"
+          data-category="${a.category}">
+          ${!isLive ? '<span class="coming-soon-badge">Coming Soon</span>' : ''}
+          <div>
+            <p class="article-tag">
+              ${capFirst(a.category)}
+              ${a.series ? '<span class="series-badge">Series</span>' : ''}
+            </p>
+            <h3 class="article-title">${a.title}</h3>
+            ${showExcerpt ? `<p class="article-excerpt">${a.excerpt}</p>` : ''}
+          </div>
+          <div class="article-meta">
+            <span>${a.readTime} min read</span>
+            ${size !== 'card-narrow' ? `<div class="meta-dot"></div><span>${capFirst(a.category)}</span>` : ''}
+          </div>
+        </a>`;
+    });
+
+    if (!quoteInserted) cardHTML += quoteHTML;
+    mosaic.innerHTML = cardHTML;
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Filter
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        document.querySelectorAll('.article-card, .quote-card').forEach(card => {
+          const cat = card.dataset.category;
+          card.classList.toggle('hidden', filter !== 'all' && cat !== filter && cat !== 'all');
+        });
+      });
+    });
+  }
+
+  loadAndRender();
+</script>
+
+</body>
+</html>
