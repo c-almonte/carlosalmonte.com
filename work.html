@@ -102,8 +102,12 @@
     transition: color 0.2s;
   }
 
-  .nav-links a:hover,
-  .nav-links a.active { color: var(--ink); }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a.active {
+    color: var(--gold);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+  }
 
   /* HERO */
   .work-hero {
@@ -113,9 +117,9 @@
   }
 
   .hero-label {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 400;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--gold);
     margin-bottom: 20px;
@@ -173,7 +177,7 @@
     border: 1px solid rgba(30,33,40,0.15);
     background: transparent;
     font-family: 'Outfit', sans-serif;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 400;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -239,7 +243,7 @@
   .card-top { }
 
   .card-era {
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -300,7 +304,7 @@
   .card-tag {
     padding: 4px 12px;
     border: 1px solid rgba(30,33,40,0.12);
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 400;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -320,9 +324,9 @@
   }
 
   .section-label {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 400;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--gold);
     margin-bottom: 8px;
@@ -370,8 +374,8 @@
   .cta-inner { max-width: 600px; margin: 0 auto; position: relative; z-index: 2; }
 
   .cta-eyebrow {
-    font-size: 11px;
-    letter-spacing: 0.2em;
+    font-size: 13px;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: rgba(245,240,232,0.45);
     margin-bottom: 20px;
@@ -435,7 +439,7 @@
   }
 
   .footer-links a {
-    font-size: 11px;
+    font-size: 13px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: rgba(245,240,232,0.35);
@@ -444,7 +448,7 @@
   }
 
   .footer-links a:hover { color: var(--warm); }
-  .footer-copy { font-size: 11px; color: rgba(245,240,232,0.2); }
+  .footer-copy { font-size: 13px; color: rgba(245,240,232,0.2); }
 
   /* ANIMATIONS */
   @keyframes fadeUp {
