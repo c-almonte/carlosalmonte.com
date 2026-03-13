@@ -148,6 +148,7 @@
       "id": "what-jazz-taught-me",
       "title": "What Jazz Taught Me About Trusting a Process You Can't Control",
       "category": "faith",
+      "authorId": "carlos-almonte",
       "featured": false,
       "series": false,
       "seriesName": "",
@@ -155,8 +156,7 @@
       "body": "",
       "date": "2026-03-10",
       "readTime": "8",
-      "published": false,
-      "authorId": "carlos-almonte",
+      "published": true,
       "heroImage": "",
       "heroImageAlt": ""
     }
