@@ -483,34 +483,52 @@
     font-size: 11px;
     color: var(--ink);
   }
-  /* TOKEN SETUP */
-  .token-banner {
-    background: rgba(196,116,90,0.08);
-    border: 1px solid rgba(196,116,90,0.2);
-    border-radius: 4px;
-    padding: 20px 24px;
-    margin-bottom: 32px;
-    display: none;
+  /* TOKEN MODAL */
+  .token-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(30,33,40,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
   }
 
-  .token-banner.visible { display: block; }
+  .token-modal {
+    background: white;
+    border-radius: 10px;
+    padding: 48px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 24px 80px rgba(30,33,40,0.2);
+  }
 
-  .token-banner p {
-    font-size: 14px;
+  .token-modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
     color: var(--ink);
-    line-height: 1.6;
     margin-bottom: 12px;
   }
 
-  .token-banner strong { color: var(--gold); }
+  .token-modal-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
 
-  .token-input-row {
+  .token-modal-desc strong { color: var(--gold); font-weight: 500; }
+
+  .token-modal-input-row {
     display: flex;
     gap: 12px;
     align-items: center;
   }
 
-  .token-input-row input {
+  .token-modal-input-row input {
     flex: 1;
     font-family: monospace;
     font-size: 13px;
@@ -629,12 +647,15 @@
   </div>
 </div>
 
-<!-- GITHUB TOKEN SETUP -->
-<div class="token-banner" id="token-banner">
-  <p>To publish articles, paste your <strong>GitHub Personal Access Token</strong> below. This is stored only in your browser and never shared.</p>
-  <div class="token-input-row">
-    <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-    <button class="btn btn-draft" onclick="saveToken()" style="width:auto;white-space:nowrap;">Save Token</button>
+<!-- GITHUB TOKEN MODAL -->
+<div class="token-modal-overlay" id="token-modal" style="display:none;">
+  <div class="token-modal">
+    <p class="token-modal-title">GitHub Token Required</p>
+    <p class="token-modal-desc">To load and publish articles, paste your <strong>GitHub Personal Access Token</strong> below. It's stored only in your browser and never shared.</p>
+    <div class="token-modal-input-row">
+      <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" onkeydown="if(event.key==='Enter') saveToken()">
+      <button class="btn btn-publish" onclick="saveToken()" style="width:auto;white-space:nowrap;">Save</button>
+    </div>
   </div>
 </div>
 
@@ -690,10 +711,11 @@
   }
 
   function showTokenBanner() {
-    const banner = document.getElementById('token-banner');
-    banner.classList.add('visible');
-    const editor = document.getElementById('editor');
-    editor.prepend(banner);
+    document.getElementById('token-modal').style.display = 'flex';
+    setTimeout(() => {
+      const input = document.getElementById('token-input');
+      if (input) input.focus();
+    }, 100);
   }
 
   function saveToken() {
@@ -701,13 +723,14 @@
     if (!token) return;
     githubToken = token;
     localStorage.setItem('ca_github_token', token);
-    document.getElementById('token-banner').classList.remove('visible');
+    document.getElementById('token-modal').style.display = 'none';
     const dot = document.getElementById('github-dot');
     const text = document.getElementById('github-status-text');
     dot.classList.remove('error');
     dot.classList.add('connected');
     text.textContent = 'GitHub connected';
-    toast('Token saved. Ready to publish.', 'success');
+    toast('Token saved. Loading articles...', 'success');
+    init();
   }
 
   // LOAD AUTHORS
