@@ -323,8 +323,7 @@
   /* Card base */
   .article-card {
     background: white;
-    border-radius: 4px;
-    padding: 36px;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -334,6 +333,46 @@
     color: inherit;
     position: relative;
     overflow: hidden;
+  }
+
+  .card-image {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .card-image-placeholder {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, var(--warm) 0%, rgba(44,74,62,0.08) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-image-placeholder span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(30,33,40,0.12);
+  }
+
+  .card-narrow .card-image,
+  .card-narrow .card-image-placeholder { aspect-ratio: 4/3; }
+
+  .card-third .card-image,
+  .card-third .card-image-placeholder { aspect-ratio: 4/3; }
+
+  .card-content {
+    padding: 24px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
   }
 
   .article-card::after {
@@ -348,8 +387,8 @@
   }
 
   .article-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(30,33,40,0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 48px rgba(30,33,40,0.10);
   }
 
   .article-card:hover::after { transform: scaleX(1); }
@@ -406,7 +445,7 @@
     flex: 1;
   }
 
-  .card-narrow .article-excerpt { display: none; }
+  .card-narrow .card-content .article-excerpt { display: none; }
 
   .article-meta {
     display: flex;
@@ -464,6 +503,40 @@
     margin-top: 16px;
   }
 
+
+
+  /* PAGINATION */
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 48px 0 32px;
+  }
+
+  .page-btn {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: white;
+    border: 1px solid rgba(30,33,40,0.12);
+    padding: 10px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .page-btn:hover:not(:disabled) { color: var(--ink); border-color: var(--ink); }
+  .page-btn:disabled { opacity: 0.3; cursor: default; }
+
+  .page-indicator {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
 
   /* COMING SOON */
   .coming-soon {
@@ -569,6 +642,14 @@
     .footer-links { flex-wrap: wrap; }
   }
 </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C04VT1W29Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-C04VT1W29Q');
+</script>
 </head>
 <body>
 
@@ -606,6 +687,7 @@
     <button class="filter-btn" data-filter="life">Life</button>
   </div>
   <div class="mosaic" id="mosaic"></div>
+  <div class="pagination" id="pagination"></div>
 </section>
 
 <footer>
@@ -622,21 +704,133 @@
 </footer>
 
 <script>
-  // Nav scroll
   const nav = document.querySelector('nav');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 40);
   });
 
-  // Card size rotation for mosaic
+  const PAGE_SIZE = 9;
   const sizePattern = ['card-wide','card-narrow','card-narrow','card-wide','card-third','card-third','card-third','card-half','card-half'];
 
   function capFirst(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
-
   function formatDate(d) {
-    const date = new Date(d);
-    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    return new Date(d).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   }
+
+  let allCards = [];
+  let currentFilter = 'all';
+  let currentPage = 1;
+
+  function cardImageHTML(a) {
+    if (a.heroImage) {
+      return `<img src="${a.heroImage}" alt="${a.heroImageAlt || a.title}" class="card-image" loading="lazy">`;
+    }
+    return `<div class="card-image-placeholder"><span>${capFirst(a.category).charAt(0)}</span></div>`;
+  }
+
+  function buildCard(a, size) {
+    const isLive = a.published;
+    const showExcerpt = (size === 'card-wide' || size === 'card-half') && a.excerpt;
+    return `
+      <a href="${isLive ? `article.html?id=${a.id}` : '#'}"
+        class="article-card ${isLive ? '' : 'coming-soon'} ${size} reveal"
+        data-category="${a.category}">
+        ${!isLive ? '<span class="coming-soon-badge">Coming Soon</span>' : ''}
+        ${cardImageHTML(a)}
+        <div class="card-content">
+          <div>
+            <p class="article-tag">
+              ${capFirst(a.category)}
+              ${a.series ? '<span class="series-badge">Series</span>' : ''}
+            </p>
+            <h3 class="article-title">${a.title}</h3>
+            ${showExcerpt ? `<p class="article-excerpt">${a.excerpt}</p>` : ''}
+          </div>
+          <div class="article-meta">
+            <span>${a.readTime} min read</span>
+            ${size !== 'card-narrow' ? `<div class="meta-dot"></div><span>${capFirst(a.category)}</span>` : ''}
+          </div>
+        </div>
+      </a>`;
+  }
+
+  const quoteHTML = `
+    <div class="quote-card reveal" data-category="all">
+      <div class="quote-mark">&ldquo;</div>
+      <div>
+        <p class="quote-text">The notes you don't play are as important as the ones you do.</p>
+        <p class="quote-source">A Jazz Principle. A Life Principle.</p>
+      </div>
+    </div>`;
+
+  function renderPage() {
+    const filtered = currentFilter === 'all'
+      ? allCards
+      : allCards.filter(a => a.category === currentFilter);
+
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = 1;
+
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+    let html = '';
+    let quoteInserted = false;
+
+    pageItems.forEach((a, i) => {
+      if (i === 2 && !quoteInserted && currentPage === 1) {
+        html += quoteHTML;
+        quoteInserted = true;
+      }
+      const size = sizePattern[i % sizePattern.length];
+      html += buildCard(a, size);
+    });
+
+    if (!quoteInserted && currentPage === 1) html += quoteHTML;
+
+    const mosaic = document.getElementById('mosaic');
+    mosaic.innerHTML = html;
+
+    // Pagination controls
+    const pg = document.getElementById('pagination');
+    if (totalPages <= 1) {
+      pg.innerHTML = '';
+    } else {
+      pg.innerHTML = `
+        <button class="page-btn" id="prev-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(-1)">&larr; Previous</button>
+        <span class="page-indicator">Page ${currentPage} of ${totalPages}</span>
+        <button class="page-btn" id="next-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(1)">Next &rarr;</button>`;
+    }
+
+    // Scroll reveal
+    const reveals = mosaic.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.06 });
+    reveals.forEach(el => observer.observe(el));
+  }
+
+  function changePage(dir) {
+    currentPage += dir;
+    renderPage();
+    document.querySelector('.filter-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Filter
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      currentPage = 1;
+      renderPage();
+    });
+  });
 
   async function loadAndRender() {
     let articles = [];
@@ -659,9 +853,10 @@
       featuredWrap.innerHTML = `
         <div class="featured-wrap reveal">
           <div class="featured-image">
-            <div class="featured-image-fallback">
-              <span class="bg-text">${capFirst(featured.category).charAt(0)}</span>
-            </div>
+            ${featured.heroImage
+              ? `<img src="${featured.heroImage}" alt="${featured.heroImageAlt || featured.title}" style="width:100%;height:100%;object-fit:cover;">`
+              : `<div class="featured-image-fallback"><span class="bg-text">${capFirst(featured.category).charAt(0)}</span></div>`
+            }
           </div>
           <div class="featured-content">
             <p class="featured-tag">Featured &nbsp;&middot;&nbsp; ${capFirst(featured.category)}</p>
@@ -680,81 +875,9 @@
         </div>`;
     }
 
-    // MOSAIC -- published first, then drafts as coming soon
-    const mosaic = document.getElementById('mosaic');
-
-    // Pull quote always first
-    const quoteHTML = `
-      <div class="quote-card reveal" data-category="all">
-        <div class="quote-mark">&ldquo;</div>
-        <div>
-          <p class="quote-text">The notes you don't play are as important as the ones you do.</p>
-          <p class="quote-source">A Jazz Principle. A Life Principle.</p>
-        </div>
-      </div>`;
-
-    const allCards = [...published.filter(a => !a.featured), ...drafts];
-    let cardHTML = '';
-    let quoteInserted = false;
-
-    allCards.forEach((a, i) => {
-      // Insert pull quote after 2nd card
-      if (i === 2 && !quoteInserted) {
-        cardHTML += quoteHTML;
-        quoteInserted = true;
-      }
-
-      const size = sizePattern[i % sizePattern.length];
-      const isLive = a.published;
-      const showExcerpt = (size === 'card-wide' || size === 'card-half') && a.excerpt;
-
-      cardHTML += `
-        <a href="${isLive ? `article.html?id=${a.id}` : '#'}"
-          class="article-card ${isLive ? '' : 'coming-soon'} ${size} reveal"
-          data-category="${a.category}">
-          ${!isLive ? '<span class="coming-soon-badge">Coming Soon</span>' : ''}
-          <div>
-            <p class="article-tag">
-              ${capFirst(a.category)}
-              ${a.series ? '<span class="series-badge">Series</span>' : ''}
-            </p>
-            <h3 class="article-title">${a.title}</h3>
-            ${showExcerpt ? `<p class="article-excerpt">${a.excerpt}</p>` : ''}
-          </div>
-          <div class="article-meta">
-            <span>${a.readTime} min read</span>
-            ${size !== 'card-narrow' ? `<div class="meta-dot"></div><span>${capFirst(a.category)}</span>` : ''}
-          </div>
-        </a>`;
-    });
-
-    if (!quoteInserted) cardHTML += quoteHTML;
-    mosaic.innerHTML = cardHTML;
-
-    // Scroll reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.08 });
-    reveals.forEach(el => observer.observe(el));
-
-    // Filter
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const filter = btn.dataset.filter;
-        document.querySelectorAll('.article-card, .quote-card').forEach(card => {
-          const cat = card.dataset.category;
-          card.classList.toggle('hidden', filter !== 'all' && cat !== filter && cat !== 'all');
-        });
-      });
-    });
+    // Build card pool: published (non-featured) first, then drafts
+    allCards = [...published.filter(a => !a.featured), ...drafts];
+    renderPage();
   }
 
   loadAndRender();
