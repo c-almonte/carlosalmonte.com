@@ -568,7 +568,7 @@
     };
 
     const desc = article.excerpt || `An essay by Carlos Almonte on ${capFirst(article.category)}.`;
-    const img = `https://carlosalmonte.com/${author && author.photo ? author.photo : 'carlos-headshot.jpg'}`;
+    const img = `https://carlosalmonte.com/${author && author.photo ? author.photo : 'images/carlos-headshot.jpg'}`;
     const url = `https://carlosalmonte.com/article.html?id=${article.id}`;
 
     setTag('meta[name="description"]', 'content', desc);
